@@ -1,5 +1,5 @@
 import type { Context, Next } from "hono";
-import { UserRepository } from "../models/User.model";
+import { UserRepository } from "../models/user.model";
 
 export interface AuthenticatedRequest {
   userId: number;
