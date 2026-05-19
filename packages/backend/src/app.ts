@@ -3,6 +3,7 @@ import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { authRoutes } from "./routes/auth.route";
 import { taskRoutes } from "./routes/task.route";
+import { healthRoute } from "./routes/health.route";
 
 export function createApp(): Hono {
   const app = new Hono();
@@ -22,6 +23,7 @@ export function createApp(): Hono {
   // Routes
   app.route("/auth", authRoutes);
   app.route("/task", taskRoutes);
+  app.route("/health", healthRoute);
 
   // 404 handler
   app.notFound((c) => {
