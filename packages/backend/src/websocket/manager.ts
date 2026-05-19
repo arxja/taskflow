@@ -1,4 +1,6 @@
-interface WebSocketWithMetadata extends WebSocket {
+import type { ServerWebSocket } from "bun";
+
+export interface WebSocketWithMetadata extends ServerWebSocket {
   userId?: number;
   subscribedTaskIds?: Set<number>;
 }
@@ -43,6 +45,13 @@ export class WebSocketManager {
     this.taskSubscribers.get(taskId)!.add(ws);
   }
 
+  unsubscribeFromTask(ws: WebSocketWithMetadata, taskId: number) {
+    if (ws.subscribedTaskIds) {
+      ws.subscribedTaskIds.delete(taskId);
+      this.taskSubscribers.get(taskId)?.delete(ws);
+    }
+  }
+
   broadcastToUser(userId: number, event: string, data: any) {
     const message = JSON.stringify({ event, data });
     const connections = this.connections.get(userId);
@@ -77,4 +86,15 @@ export class WebSocketManager {
       }
     }
   }
+
+  getConnectedUsers(): number[] {
+    return Array.from(this.connections.keys());
+  }
+
+  getUserConnectionCount(userId: number): number {
+    return this.connections.get(userId)?.size || 0;
+  }
 }
+
+// Singleton instance
+export const wsManager = new WebSocketManager();
