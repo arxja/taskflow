@@ -21,9 +21,11 @@ export function createApp(): Hono {
   app.use("*", logger());
 
   // Routes
-  app.route("/auth", authRoutes);
-  app.route("/task", taskRoutes);
+  // Public routes
   app.route("/health", healthRoute);
+  app.route("/auth", authRoutes);
+  // Protects routes
+  app.route("/task", taskRoutes);
 
   // 404 handler
   app.notFound((c) => {
