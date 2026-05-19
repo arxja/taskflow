@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
+import { authRoutes } from "./routes/auth.route";
 
 export function createApp(): Hono {
   const app = new Hono();
@@ -16,6 +17,9 @@ export function createApp(): Hono {
     }),
   );
   app.use("*", logger());
+
+  // Routes
+  app.route("/auth", authRoutes);
 
   // 404 handler
   app.notFound((c) => {
